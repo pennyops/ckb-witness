@@ -8,7 +8,7 @@ table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px
 .big{font-size:1.6em;font-weight:700}code{background:#f3f3f3;padding:1px 4px}
 </style></head><body>
 <h1>ckb-witness: public CKB RPC agreement monitor</h1>
-<p>Each hourly run asks every keyless public CKB mainnet RPC for its tip, then compares the block hash at a common height (tip - 12).
+<p>Each hourly run asks every keyless public CKB mainnet RPC for its tip, then compares the block hash at a common height (tip - 12), then looks up the newest transaction of that block on every endpoint (all should report it committed in the same block).
 Disagreement or a lagging endpoint means a user who trusts that single endpoint could see a stale or different chain view.
 Source and raw log: <a href="https://github.com/pennyops/ckb-witness">github.com/pennyops/ckb-witness</a>
 (<a href="https://raw.githubusercontent.com/pennyops/ckb-witness/main/measurements.log">measurements.log</a>).</p>
@@ -19,18 +19,20 @@ Source and raw log: <a href="https://github.com/pennyops/ckb-witness">github.com
 fetch('https://raw.githubusercontent.com/pennyops/ckb-witness/main/measurements.log',{cache:'no-store'})
 .then(r=>r.text()).then(t=>{
  const lines=t.trim().split('\n').filter(l=>l.trim());
- let agree=0,dis=0,maxlag=0,err=0;const rows=[];
+ let agree=0,dis=0,maxlag=0,err=0,txok=0,txbad=0;const rows=[];
  for(const l of lines){
   const sp=l.indexOf(' ');const ts=l.slice(0,sp);const parts=l.slice(sp+1).split('|').filter(Boolean);
-  const eps=[];let res='';
+  const eps=[];let res='',tx='';
   for(const p of parts){
    if(p.startsWith('height')){res=p;continue}
+   if(p.startsWith('tx ')){tx=p;continue}
    const m=p.match(/^(\S+) tip=(\d+) lag=(\d+) rtt=([\d.]+)s/);
    if(m){eps.push(m[1].replace('https://','').replace('/rpc','')+': '+m[2]+' / '+m[3]+' / '+m[4]+'s');maxlag=Math.max(maxlag,+m[3])}
    else{eps.push(p);err++}
   }
   const ok=/AGREE/.test(res)&&!/DISAGREE/.test(res);if(ok)agree++;else dis++;
-  rows.push(`<tr><td>${ts}</td><td>${eps.join('<br>')}</td><td class="${ok?'ok':'bad'}">${ok?'AGREE':(res.split(':')[1]||'NO RESULT').split('{')[0]}</td></tr>`);
+  if(/TXAGREE/.test(tx))txok++;else if(/TXMISMATCH/.test(tx))txbad++;
+  rows.push(`<tr><td>${ts}</td><td>${eps.join('<br>')}</td><td class="${ok?'ok':'bad'}">${ok?'AGREE':(res.split(':')[1]||'NO RESULT').split('{')[0]}${tx?'<br>'+tx.replace(/^tx \S+ /,'tx: '):''}</td></tr>`);
  }
  document.getElementById('sum').innerHTML=
   `<span class="box"><span class="big">${lines.length}</span><br>runs</span>`+
@@ -38,6 +40,7 @@ fetch('https://raw.githubusercontent.com/pennyops/ckb-witness/main/measurements.
   `<span class="box"><span class="big ${dis?'bad':''}">${dis}</span><br>disagree / no result</span>`+
   `<span class="box"><span class="big">${maxlag}</span><br>max tip lag (blocks)</span>`+
   `<span class="box"><span class="big">${err}</span><br>endpoint errors</span>`+
+  `<span class="box"><span class="big">${txok}/${txok+txbad}</span><br>tx lookups consistent</span>`+
   `<p>First run ${lines[0].split(' ')[0]}, latest ${lines[lines.length-1].split(' ')[0]}.</p>`;
  document.getElementById('rows').innerHTML=rows.reverse().join('');
 }).catch(e=>{document.getElementById('sum').textContent='could not load log: '+e});
