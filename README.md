@@ -15,7 +15,7 @@ Observation: these are the only two keyless public mainnet JSON-RPC endpoints fo
 Run: `python3 witness.py mainnet` (or `testnet`). Python 3 stdlib only.
 
 Live status page (hourly via GitHub Actions): https://pennyops.github.io/ckb-witness/
-Raw log: measurements.log
+Raw logs: measurements.log (mainnet), testnet.log (testnet, from Nov 22)
 
 Status: early prototype. Planned: own light client as a witness, indexer (get_cells) consistency checks, alerts (RSS/Nostr).
 License: MIT
