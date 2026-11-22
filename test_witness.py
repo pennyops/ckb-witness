@@ -16,4 +16,14 @@ class T(unittest.TestCase):
         u = witness.EPS["testnet"]
         o = self.run_with({u[0]: 100, u[1]: 97}, {u[0]: "0xaa", u[1]: "0xbb"})
         self.assertIn("DISAGREE", o); self.assertIn("lag=3", o)
+    def test_tx_mismatch(self):
+        u = witness.EPS["testnet"]
+        def fake(url, method, params):
+            if method == "get_block_by_number": return {"transactions": [{"hash": "0x" + "ab" * 32}]}, 0.1
+            st = "committed" if url == u[0] else "unknown"
+            return {"tx_status": {"status": st, "block_hash": "0xcc" if st == "committed" else None}}, 0.1
+        witness.rpc = fake
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out): witness.txcheck(u, 100)
+        self.assertIn("TXMISMATCH", out.getvalue())
 if __name__ == "__main__": unittest.main()
