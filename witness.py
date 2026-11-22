@@ -28,4 +28,18 @@ def main(net):
         except Exception as e: print("explorer DOWN",e)
     agree=len(set(hashes.values()))==1
     print(f"height {h}: {'AGREE' if agree else 'DISAGREE'} {set(hashes.values())}")
+    txcheck(list(ok), h)
+def txcheck(urls, h):
+    """Pick the newest tx in block h and ask every endpoint for it: all should say committed in the same block."""
+    try:
+        blk,_=rpc(urls[0],"get_block_by_number",[hex(h)])
+        txs=blk["transactions"]; txh=txs[-1]["hash"]
+    except Exception as e: print("tx SKIP",type(e).__name__); return
+    seen={}
+    for u in urls:
+        try:
+            r,_=rpc(u,"get_transaction",[txh]); st=r["tx_status"]; seen[u]=(st["status"],st.get("block_hash"))
+        except Exception as e: seen[u]=("error",type(e).__name__)
+    same=len(set(seen.values()))==1 and all(v[0]=="committed" for v in seen.values())
+    print(f"tx {txh[:18]} {'TXAGREE' if same else 'TXMISMATCH'} {sorted(set(v[0] for v in seen.values()))}")
 if __name__=="__main__": main(sys.argv[1] if len(sys.argv)>1 else "mainnet")
