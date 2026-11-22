@@ -6,6 +6,7 @@ forks off, or silently drops data, the user cannot tell.
 ckb-witness asks several independent sources the same question and reports:
 - tip lag between sources
 - block-hash agreement at a recent height (tip - 12)
+- indexer lag (node tip minus get_indexer_tip) per endpoint
 - tx visibility: the newest tx of that block must be reported `committed` in the same block by every endpoint
 
 Sources today (mainnet): mainnet.ckb.dev, mainnet.ckbapp.dev, CKB Explorer API.
