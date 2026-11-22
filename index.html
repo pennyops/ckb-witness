@@ -13,7 +13,8 @@ Disagreement or a lagging endpoint means a user who trusts that single endpoint 
 Source and raw log: <a href="https://github.com/pennyops/ckb-witness">github.com/pennyops/ckb-witness</a>
 (<a href="https://raw.githubusercontent.com/pennyops/ckb-witness/main/measurements.log">measurements.log</a>).</p>
 <div id="sum">loading…</div>
-<h2>Recent runs (newest first)</h2>
+<p><b>Testnet, latest run:</b> <code id="tn">loading…</code> (<a href="https://raw.githubusercontent.com/pennyops/ckb-witness/main/testnet.log">testnet.log</a>)</p>
+<h2>Recent mainnet runs (newest first)</h2>
 <table><thead><tr><th>time (UTC)</th><th>endpoints (tip / lag / rtt)</th><th>result</th></tr></thead><tbody id="rows"></tbody></table>
 <script>
 fetch('https://raw.githubusercontent.com/pennyops/ckb-witness/main/measurements.log',{cache:'no-store'})
@@ -45,5 +46,6 @@ fetch('https://raw.githubusercontent.com/pennyops/ckb-witness/main/measurements.
   `<p>First run ${lines[0].split(' ')[0]}, latest ${lines[lines.length-1].split(' ')[0]}.</p>`;
  document.getElementById('rows').innerHTML=rows.reverse().join('');
 }).catch(e=>{document.getElementById('sum').textContent='could not load log: '+e});
+fetch('https://raw.githubusercontent.com/pennyops/ckb-witness/main/testnet.log',{cache:'no-store'}).then(r=>r.text()).then(t=>{const l=t.trim().split('\n').pop()||'';document.getElementById('tn').textContent=l.replace(/\|/g,' | ')}).catch(e=>{document.getElementById('tn').textContent='n/a'});
 </script>
 </body></html>
