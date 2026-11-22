@@ -29,6 +29,14 @@ def main(net):
     agree=len(set(hashes.values()))==1
     print(f"height {h}: {'AGREE' if agree else 'DISAGREE'} {set(hashes.values())}")
     txcheck(list(ok), h)
+    idxcheck(ok)
+def idxcheck(ok):
+    """Indexer lag: blocks between each endpoint's node tip and its indexer tip (stale indexer = wrong balances/cells)."""
+    lags=[]
+    for u,v in ok.items():
+        try: r,_=rpc(u,"get_indexer_tip",[]); lags.append(str(max(0,v[0]-int(r["block_number"],16))))
+        except Exception as e: lags.append("err")
+    print("idxlag "+",".join(lags))
 def txcheck(urls, h):
     """Pick the newest tx in block h and ask every endpoint for it: all should say committed in the same block."""
     try:
