@@ -11,7 +11,8 @@ jobs:
       - uses: actions/checkout@v4
       - run: python3 -m unittest test_witness -v
       - run: echo "$(date -u +%FT%TZ) $(python3 witness.py mainnet 2>&1 | tr '\n' '|')" >> measurements.log
+      - run: echo "$(date -u +%FT%TZ) $(python3 witness.py testnet 2>&1 | tr '\n' '|')" >> testnet.log
       - run: |
           git config user.name ckb-witness-bot
           git config user.email actions@users.noreply.github.com
-          git add measurements.log && git commit -m "measurement" && git push
+          git add measurements.log testnet.log && git commit -m "measurement" && git push
