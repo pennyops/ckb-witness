@@ -1,0 +1,17 @@
+name: witness
+on:
+  schedule: [{cron: "17 * * * *"}]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m unittest test_witness -v
+      - run: echo "$(date -u +%FT%TZ) $(python3 witness.py mainnet 2>&1 | tr '\n' '|')" >> measurements.log
+      - run: |
+          git config user.name ckb-witness-bot
+          git config user.email actions@users.noreply.github.com
+          git add measurements.log && git commit -m "measurement" && git push
