@@ -11,7 +11,7 @@ table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px
 <p>Each hourly run asks every keyless public CKB mainnet RPC for its tip, then compares the block hash at a common height (tip - 12), then looks up the newest transaction of that block on every endpoint (all should report it committed in the same block).
 Disagreement or a lagging endpoint means a user who trusts that single endpoint could see a stale or different chain view.
 Source and raw log: <a href="https://github.com/pennyops/ckb-witness">github.com/pennyops/ckb-witness</a>
-(<a href="https://raw.githubusercontent.com/pennyops/ckb-witness/main/measurements.log">measurements.log</a>).</p>
+(<a href="https://raw.githubusercontent.com/pennyops/ckb-witness/main/measurements.log">measurements.log</a>). Anomaly events (disagreement, lag, endpoint down, tx mismatch, indexer lag) as an Atom feed: <a href="feed.xml">feed.xml</a>.</p>
 <div id="sum">loading…</div>
 <p><b>Testnet, latest run:</b> <code id="tn">loading…</code> (<a href="https://raw.githubusercontent.com/pennyops/ckb-witness/main/testnet.log">testnet.log</a>)</p>
 <h2>Per-endpoint uptime</h2>
