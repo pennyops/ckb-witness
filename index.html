@@ -14,13 +14,15 @@ Source and raw log: <a href="https://github.com/pennyops/ckb-witness">github.com
 (<a href="https://raw.githubusercontent.com/pennyops/ckb-witness/main/measurements.log">measurements.log</a>).</p>
 <div id="sum">loading…</div>
 <p><b>Testnet, latest run:</b> <code id="tn">loading…</code> (<a href="https://raw.githubusercontent.com/pennyops/ckb-witness/main/testnet.log">testnet.log</a>)</p>
+<h2>Per-endpoint uptime</h2>
+<table><thead><tr><th>endpoint</th><th>runs seen</th><th>answered</th><th>uptime</th><th>runs lagging</th><th>max lag</th><th>median rtt</th><th>p95 rtt</th></tr></thead><tbody id="up"></tbody></table>
 <h2>Recent mainnet runs (newest first)</h2>
 <table><thead><tr><th>time (UTC)</th><th>endpoints (tip / lag / rtt)</th><th>result</th></tr></thead><tbody id="rows"></tbody></table>
 <script>
 fetch('https://raw.githubusercontent.com/pennyops/ckb-witness/main/measurements.log',{cache:'no-store'})
 .then(r=>r.text()).then(t=>{
  const lines=t.trim().split('\n').filter(l=>l.trim());
- let agree=0,dis=0,maxlag=0,err=0,txok=0,txbad=0;const rows=[];
+ let agree=0,dis=0,maxlag=0,err=0,txok=0,txbad=0;const rows=[];const st={};const S=n=>st[n]||(st[n]={seen:0,ok:0,lagr:0,maxl:0,rtt:[]});
  for(const l of lines){
   const sp=l.indexOf(' ');const ts=l.slice(0,sp);const parts=l.slice(sp+1).split('|').filter(Boolean);
   const eps=[];let res='',tx='',idx='';
@@ -29,8 +31,8 @@ fetch('https://raw.githubusercontent.com/pennyops/ckb-witness/main/measurements.
    if(p.startsWith('tx ')){tx=p;continue}
    if(p.startsWith('idxlag')){idx=p;continue}
    const m=p.match(/^(\S+) tip=(\d+) lag=(\d+) rtt=([\d.]+)s/);
-   if(m){eps.push(m[1].replace('https://','').replace('/rpc','')+': '+m[2]+' / '+m[3]+' / '+m[4]+'s');maxlag=Math.max(maxlag,+m[3])}
-   else{eps.push(p);err++}
+   if(m){const e=S(m[1].replace('https://',''));e.seen++;e.ok++;if(+m[3]>0)e.lagr++;e.maxl=Math.max(e.maxl,+m[3]);e.rtt.push(+m[4]);eps.push(m[1].replace('https://','').replace('/rpc','')+': '+m[2]+' / '+m[3]+' / '+m[4]+'s');maxlag=Math.max(maxlag,+m[3])}
+   else{const u=(p.match(/https?:\/\/\S+/)||[''])[0];if(u){S(u.replace('https://','')).seen++}eps.push(p);err++}
   }
   const ok=/AGREE/.test(res)&&!/DISAGREE/.test(res);if(ok)agree++;else dis++;
   if(/TXAGREE/.test(tx))txok++;else if(/TXMISMATCH/.test(tx))txbad++;
@@ -45,6 +47,8 @@ fetch('https://raw.githubusercontent.com/pennyops/ckb-witness/main/measurements.
   `<span class="box"><span class="big">${txok}/${txok+txbad}</span><br>tx lookups consistent</span>`+
   `<p>First run ${lines[0].split(' ')[0]}, latest ${lines[lines.length-1].split(' ')[0]}.</p>`;
  document.getElementById('rows').innerHTML=rows.reverse().join('');
+ const q=(a,f)=>{if(!a.length)return '-';const b=[...a].sort((x,y)=>x-y);return b[Math.min(b.length-1,Math.floor(f*(b.length-1)+0.5))].toFixed(2)+'s'};
+ document.getElementById('up').innerHTML=Object.entries(st).map(([n,e])=>`<tr><td>${n}</td><td>${e.seen}</td><td>${e.ok}</td><td class="${e.ok===e.seen?'ok':'bad'}">${(100*e.ok/e.seen).toFixed(1)}%</td><td>${e.lagr}</td><td>${e.maxl}</td><td>${q(e.rtt,.5)}</td><td>${q(e.rtt,.95)}</td></tr>`).join('');
 }).catch(e=>{document.getElementById('sum').textContent='could not load log: '+e});
 fetch('https://raw.githubusercontent.com/pennyops/ckb-witness/main/testnet.log',{cache:'no-store'}).then(r=>r.text()).then(t=>{const l=t.trim().split('\n').pop()||'';document.getElementById('tn').textContent=l.replace(/\|/g,' | ')}).catch(e=>{document.getElementById('tn').textContent='n/a'});
 </script>
