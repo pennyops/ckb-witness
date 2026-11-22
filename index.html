@@ -22,17 +22,18 @@ fetch('https://raw.githubusercontent.com/pennyops/ckb-witness/main/measurements.
  let agree=0,dis=0,maxlag=0,err=0,txok=0,txbad=0;const rows=[];
  for(const l of lines){
   const sp=l.indexOf(' ');const ts=l.slice(0,sp);const parts=l.slice(sp+1).split('|').filter(Boolean);
-  const eps=[];let res='',tx='';
+  const eps=[];let res='',tx='',idx='';
   for(const p of parts){
    if(p.startsWith('height')){res=p;continue}
    if(p.startsWith('tx ')){tx=p;continue}
+   if(p.startsWith('idxlag')){idx=p;continue}
    const m=p.match(/^(\S+) tip=(\d+) lag=(\d+) rtt=([\d.]+)s/);
    if(m){eps.push(m[1].replace('https://','').replace('/rpc','')+': '+m[2]+' / '+m[3]+' / '+m[4]+'s');maxlag=Math.max(maxlag,+m[3])}
    else{eps.push(p);err++}
   }
   const ok=/AGREE/.test(res)&&!/DISAGREE/.test(res);if(ok)agree++;else dis++;
   if(/TXAGREE/.test(tx))txok++;else if(/TXMISMATCH/.test(tx))txbad++;
-  rows.push(`<tr><td>${ts}</td><td>${eps.join('<br>')}</td><td class="${ok?'ok':'bad'}">${ok?'AGREE':(res.split(':')[1]||'NO RESULT').split('{')[0]}${tx?'<br>'+tx.replace(/^tx \S+ /,'tx: '):''}</td></tr>`);
+  rows.push(`<tr><td>${ts}</td><td>${eps.join('<br>')}</td><td class="${ok?'ok':'bad'}">${ok?'AGREE':(res.split(':')[1]||'NO RESULT').split('{')[0]}${tx?'<br>'+tx.replace(/^tx \S+ /,'tx: '):''}${idx?'<br>indexer lag: '+idx.slice(7):''}</td></tr>`);
  }
  document.getElementById('sum').innerHTML=
   `<span class="box"><span class="big">${lines.length}</span><br>runs</span>`+
