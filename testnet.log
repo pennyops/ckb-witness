@@ -1,0 +1,1 @@
+2026-11-22T22:04:53Z https://testnet.ckb.dev/rpc tip=23151600 lag=0 rtt=0.18s|https://testnet.ckbapp.dev/rpc tip=23151600 lag=0 rtt=0.29s|height 23151588: AGREE {'0x7735e052e90aecd5c1d17a1dcbf3e92e90be7ffe8a60544581af9e9e1f11330b'}|tx 0x822030f094416935 TXAGREE ['committed']|idxlag 0,0|
