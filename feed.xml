@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 <title>ckb-witness anomalies</title>
-<link href="https://pennyops.github.io/ckb-witness/"/><id>https://pennyops.github.io/ckb-witness/feed.xml</id><updated>2026-11-23T18:34:38Z</updated>
+<link href="https://pennyops.github.io/ckb-witness/"/><id>https://pennyops.github.io/ckb-witness/feed.xml</id><updated>2026-11-23T20:09:08Z</updated>
 <author><name>ckb-witness</name></author>
+<entry><title>testnet 2026-11-23T20:09:08Z: https://testnet.ckb.dev/rpc lag 1 blocks</title><id>https://pennyops.github.io/ckb-witness/#testnet-2026-11-23T20:09:08Z</id><updated>2026-11-23T20:09:08Z</updated><link href="https://pennyops.github.io/ckb-witness/"/><content type="text">https://testnet.ckb.dev/rpc lag 1 blocks</content></entry>
 <entry><title>mainnet 2026-11-23T18:34:38Z: explorer DOWN The read operation timed out</title><id>https://pennyops.github.io/ckb-witness/#mainnet-2026-11-23T18:34:38Z</id><updated>2026-11-23T18:34:38Z</updated><link href="https://pennyops.github.io/ckb-witness/"/><content type="text">explorer DOWN The read operation timed out</content></entry>
 <entry><title>testnet 2026-11-23T17:38:36Z: tx 0xb97baf31bac69eae TXMISMATCH ['committed', 'error']</title><id>https://pennyops.github.io/ckb-witness/#testnet-2026-11-23T17:38:36Z</id><updated>2026-11-23T17:38:36Z</updated><link href="https://pennyops.github.io/ckb-witness/"/><content type="text">tx 0xb97baf31bac69eae TXMISMATCH ['committed', 'error']</content></entry>
 <entry><title>mainnet 2026-11-23T17:38:24Z: block hash DISAGREE or no result</title><id>https://pennyops.github.io/ckb-witness/#mainnet-2026-11-23T17:38:24Z</id><updated>2026-11-23T17:38:24Z</updated><link href="https://pennyops.github.io/ckb-witness/"/><content type="text">block hash DISAGREE or no result</content></entry>
