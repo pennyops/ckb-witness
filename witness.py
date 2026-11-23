@@ -24,7 +24,8 @@ def main(net):
     for u,v in ok.items(): print(f"{u} tip={v[0]} lag={hi-v[0]} rtt={v[2]:.2f}s")
     h=lo-12; hashes={}
     for u in ok:
-        b,_=rpc(u,"get_block_hash",[hex(h)]); hashes[u]=b
+        try: b,_=rpc(u,"get_block_hash",[hex(h)]); hashes[u]=b
+        except Exception as e: print("hash ERR",u,type(e).__name__,e)
     if net=="mainnet":
         try:
             req=urllib.request.Request(f"https://mainnet-api.explorer.nervos.org/api/v1/blocks/{h}",
