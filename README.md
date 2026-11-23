@@ -14,6 +14,13 @@ Observation: these are the only two keyless public mainnet JSON-RPC endpoints fo
 
 Run: `python3 witness.py mainnet` (or `testnet`). Python 3 stdlib only.
 
+Use it for your own endpoint:
+- `CKB_WITNESS_ENDPOINTS=https://your-node/rpc,https://mainnet.ckb.dev/rpc python3 witness.py mainnet` checks your
+  RPC against others (comma-separated list replaces the built-in one).
+- `python3 witness.py mainnet --check` exits 1 if any endpoint is down, lags more than 2 blocks, or disagrees on the
+  block hash at tip-12 or on a recent transaction. Put it in CI or cron before trusting an endpoint.
+- Fork this repo to get the same hourly GitHub Actions run and status page for your own endpoint list.
+
 Live status page (hourly via GitHub Actions): https://pennyops.github.io/ckb-witness/
 Raw logs: measurements.log (mainnet), testnet.log (testnet, from Nov 22)
 
