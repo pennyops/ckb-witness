@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 <title>ckb-witness anomalies</title>
-<link href="https://pennyops.github.io/ckb-witness/"/><id>https://pennyops.github.io/ckb-witness/feed.xml</id><updated>2026-11-23T21:00:33Z</updated>
+<link href="https://pennyops.github.io/ckb-witness/"/><id>https://pennyops.github.io/ckb-witness/feed.xml</id><updated>2026-11-23T21:32:32Z</updated>
 <author><name>ckb-witness</name></author>
+<entry><title>testnet 2026-11-23T21:32:32Z: DOWN https://testnet.ckbapp.dev/rpc HTTP Error 502: Bad Gateway</title><id>https://pennyops.github.io/ckb-witness/#testnet-2026-11-23T21:32:32Z</id><updated>2026-11-23T21:32:32Z</updated><link href="https://pennyops.github.io/ckb-witness/"/><content type="text">DOWN https://testnet.ckbapp.dev/rpc HTTP Error 502: Bad Gateway</content></entry>
 <entry><title>testnet 2026-11-23T21:00:33Z: DOWN https://testnet.ckbapp.dev/rpc The read operation timed out</title><id>https://pennyops.github.io/ckb-witness/#testnet-2026-11-23T21:00:33Z</id><updated>2026-11-23T21:00:33Z</updated><link href="https://pennyops.github.io/ckb-witness/"/><content type="text">DOWN https://testnet.ckbapp.dev/rpc The read operation timed out</content></entry>
 <entry><title>mainnet 2026-11-23T20:57:53Z: explorer DOWN The read operation timed out</title><id>https://pennyops.github.io/ckb-witness/#mainnet-2026-11-23T20:57:53Z</id><updated>2026-11-23T20:57:53Z</updated><link href="https://pennyops.github.io/ckb-witness/"/><content type="text">explorer DOWN The read operation timed out</content></entry>
 <entry><title>testnet 2026-11-23T20:30:45Z: tx 0xead134b17015eaf2 TXMISMATCH ['committed', 'error']</title><id>https://pennyops.github.io/ckb-witness/#testnet-2026-11-23T20:30:45Z</id><updated>2026-11-23T20:30:45Z</updated><link href="https://pennyops.github.io/ckb-witness/"/><content type="text">tx 0xead134b17015eaf2 TXMISMATCH ['committed', 'error']</content></entry>
